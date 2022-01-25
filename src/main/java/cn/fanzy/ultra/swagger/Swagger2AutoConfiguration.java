@@ -4,12 +4,14 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.StrUtil;
 import com.github.xiaoymin.knife4j.core.extend.OpenApiExtendSetting;
+import com.github.xiaoymin.knife4j.spring.configuration.Knife4jAutoConfiguration;
 import com.github.xiaoymin.knife4j.spring.extension.OpenApiExtensionResolver;
 import com.github.xiaoymin.knife4j.spring.filter.ProductionSecurityFilter;
 import com.github.xiaoymin.knife4j.spring.filter.SecurityBasicAuthFilter;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -55,6 +57,7 @@ import java.util.List;
                 "com.github.xiaoymin.knife4j.spring.plugin",
         }
 )
+@AutoConfigureAfter(value = Knife4jAutoConfiguration.class)
 @ConditionalOnProperty(prefix = "plus.swagger", name = {"enable"}, havingValue = "true", matchIfMissing = true)
 public class Swagger2AutoConfiguration implements WebMvcConfigurer {
     @Autowired

@@ -3,6 +3,7 @@
  */
 package cn.fanzy.ultra.swagger;
 
+import cn.hutool.core.collection.CollUtil;
 import com.github.xiaoymin.knife4j.core.extend.OpenApiExtendSetting;
 import com.github.xiaoymin.knife4j.core.model.MarkdownProperty;
 import com.github.xiaoymin.knife4j.spring.configuration.Knife4jHttpBasic;
@@ -29,10 +30,11 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SwaggerProperties {
+    public static final List<String> SWAGGER_LIST = CollUtil.toList("/doc.html", "/swagger-resources/**", "/webjars/**", "/favicon.ico", "/error");
     /**
      * 是否启用swagger标志
      */
-    private Boolean enable;
+    private Boolean enable=true;
     /**
      * swagger 文档的标题
      */
