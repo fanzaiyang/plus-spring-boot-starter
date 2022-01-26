@@ -241,4 +241,5 @@ public class Json<T> {
     public boolean isSuccess() {
         return this.code == 200;
     }
+
 }

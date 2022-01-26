@@ -97,9 +97,10 @@ public class WebExceptionAutoConfiguration {
     public Object handleHttpRequestMethodNotSupportedException(HttpServletRequest request,
                                                                HttpRequestMethodNotSupportedException e) {
         String ssid = this.getRequestId(request);
-        Json<String> response = new Json<String>(HttpStatus.METHOD_NOT_ALLOWED.value(), StrUtil.blankToDefault(e.getMessage(), "不支持当前请求方法"))
+        Json<String> response = new Json<String>(HttpStatus.METHOD_NOT_ALLOWED.value(),
+                enToCn(StrUtil.blankToDefault(e.getMessage(), "不支持当前请求方法")))
                 .setId(ssid);
-        log.error(StrUtil.format("【Plus组件】请求{},不支持当前请求方法,失败的原因为：{}", ssid, e.getMessage()), e);
+        log.error(StrUtil.format("【Plus组件】请求{},不支持当前请求方法,失败的原因为：{}", ssid, e.getMessage()));
         return response;
 
     }
@@ -309,7 +310,7 @@ public class WebExceptionAutoConfiguration {
     @ExceptionHandler(NoHandlerFoundException.class)
     public Object handleException(HttpServletRequest request, NoHandlerFoundException e) {
         String ssid = this.getRequestId(request);
-        Json<Object> response = new Json<>(404, e.getMessage()).setId(ssid);
+        Json<Object> response = new Json<>(404, enToCn(e.getMessage())).setId(ssid);
         log.error(StrUtil.format("【Plus组件】请求{},请求失败,拦截到未找到处理程序异常：{}", ssid, e.getMessage()));
         return response;
     }
@@ -389,4 +390,23 @@ public class WebExceptionAutoConfiguration {
         log.debug("【Plus组件】: 开启 <全局异常拦截> 相关的配置");
     }
 
+
+    private String enToCn(String en) {
+        if (StrUtil.equalsIgnoreCase(en, "Request method 'GET' not supported")) {
+            return "该接口不支持GET方式！";
+        }
+        if (StrUtil.equalsIgnoreCase(en, "Request method 'POST' not supported")) {
+            return "该接口不支持POST方式！";
+        }
+        if (StrUtil.startWithIgnoreCase(en, "No handler found for")) {
+            return "该接口不存在！" + StrUtil.subAfter(en, "No handler found for ", false);
+        }
+        if (StrUtil.equalsIgnoreCase(en, "Request method 'PUT' not supported")) {
+            return "该接口不支持PUT方式！";
+        }
+        if (StrUtil.equalsIgnoreCase(en, "Request method 'DELETE' not supported")) {
+            return "该接口不支持DELETE方式！";
+        }
+        return en;
+    }
 }
