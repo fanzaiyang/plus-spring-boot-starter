@@ -143,7 +143,7 @@ public class Swagger2AutoConfiguration implements WebMvcConfigurer {
      */
     private List<Parameter> buildParameter() {
         if (BooleanUtil.isTrue(this.swaggerProperties.getShowDeatil())) {
-            log.info("【公共组件】 swagger-ui 授权参数为 {}", this.swaggerProperties.getAuths());
+            log.info("【Plus组件】 swagger-ui 授权参数为 {}", this.swaggerProperties.getAuths());
         }
 
         List<Parameter> pars = new ArrayList<>();

@@ -14,6 +14,7 @@ public class BaseArgs {
 
     public Integer getPageNum() {
         if (pageNum == null || pageNum < 1) {
+            // 从query或posted form data中获取pageNum
             String pageNum = SpringUtil.getRequest().getParameter("pageNum");
             return NumberUtil.isNumber(pageNum) ? NumberUtil.parseInt(pageNum) : 1;
         }
@@ -26,6 +27,7 @@ public class BaseArgs {
 
     public Integer getPageSize() {
         if (pageSize == null || pageSize < 1) {
+            // 从query或posted form data中获取pageSize
             String pageSize = SpringUtil.getRequest().getParameter("pageSize");
             return NumberUtil.isNumber(pageSize) ? NumberUtil.parseInt(pageSize) : 15;
         }

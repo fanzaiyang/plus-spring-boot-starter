@@ -71,6 +71,6 @@ public class WebFilterAutoConfiguration {
     @PostConstruct
     public void checkConfig() {
 
-        log.debug("【公共组件】: 开启 <web增强支持> 相关的配置");
+        log.debug("【Plus组件】: 开启 <web增强支持> 相关的配置");
     }
 }

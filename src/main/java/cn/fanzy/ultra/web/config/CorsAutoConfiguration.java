@@ -81,7 +81,7 @@ public class CorsAutoConfiguration {
     @PostConstruct
     public void checkConfig() {
 
-        log.debug("【公共组件】: 开启 <跨域支持> 相关的配置");
+        log.debug("【Plus组件】: 开启 <跨域支持> 相关的配置");
     }
 
 }

@@ -64,7 +64,7 @@ public class WebExceptionAutoConfiguration {
     public Object handleHttpMessageNotReadableException(HttpServletRequest request, HttpMessageNotReadableException e) {
         String ssid = this.getRequestId(request);
         Json<String> response = new Json<String>(HttpStatus.BAD_REQUEST.value(), StrUtil.blankToDefault(e.getMessage(), "参数解析失败")).setId(ssid);
-        log.error(StrUtil.format("【公共组件】请求{},错误的请求,失败的原因为：{}", ssid, e.getMessage())
+        log.error(StrUtil.format("【Plus组件】请求{},错误的请求,失败的原因为：{}", ssid, e.getMessage())
                 , e);
         return response;
     }
@@ -81,7 +81,7 @@ public class WebExceptionAutoConfiguration {
     public Object handleIllegalArgumentException(HttpServletRequest request, IllegalArgumentException e) {
         String ssid = this.getRequestId(request);
         Json<String> response = new Json<String>(HttpStatus.BAD_REQUEST.value(), StrUtil.blankToDefault(e.getMessage(), "参数不符合要求")).setId(ssid);
-        log.error(StrUtil.format("【公共组件】请求{}，参数解析失败,失败的原因为：{}", ssid, e.getMessage()), e);
+        log.error(StrUtil.format("【Plus组件】请求{}，参数解析失败,失败的原因为：{}", ssid, e.getMessage()), e);
         return response;
     }
 
@@ -99,7 +99,7 @@ public class WebExceptionAutoConfiguration {
         String ssid = this.getRequestId(request);
         Json<String> response = new Json<String>(HttpStatus.METHOD_NOT_ALLOWED.value(), StrUtil.blankToDefault(e.getMessage(), "不支持当前请求方法"))
                 .setId(ssid);
-        log.error(StrUtil.format("【公共组件】请求{},不支持当前请求方法,失败的原因为：{}", ssid, e.getMessage()), e);
+        log.error(StrUtil.format("【Plus组件】请求{},不支持当前请求方法,失败的原因为：{}", ssid, e.getMessage()), e);
         return response;
 
     }
@@ -118,7 +118,7 @@ public class WebExceptionAutoConfiguration {
         String ssid = this.getRequestId(request);
         Json<String> response = new Json<String>(HttpStatus.METHOD_NOT_ALLOWED.value(), StrUtil.blankToDefault(e.getMessage(), "不支持当前媒体类型"))
                 .setId(ssid);
-        log.error(StrUtil.format("【公共组件】请求{},不支持当前媒体类型,失败的原因为：{}", ssid, e.getMessage()), e);
+        log.error(StrUtil.format("【Plus组件】请求{},不支持当前媒体类型,失败的原因为：{}", ssid, e.getMessage()), e);
         return response;
     }
 
@@ -135,7 +135,7 @@ public class WebExceptionAutoConfiguration {
         String ssid = this.getRequestId(request);
         e.printStackTrace();
         Json<String> response = new Json<String>(HttpStatus.INTERNAL_SERVER_ERROR.value(), StrUtil.blankToDefault(e.getMessage(), "请求失败")).setId(ssid);
-        log.error(StrUtil.format("【公共组件】请求{},请求失败,失败的原因为空指针异常!", ssid), e);
+        log.error(StrUtil.format("【Plus组件】请求{},请求失败,失败的原因为空指针异常!", ssid), e);
         return response;
     }
 
@@ -152,7 +152,7 @@ public class WebExceptionAutoConfiguration {
         String ssid = this.getRequestId(request);
         String msg = e.getMessage();
         Json<String> response = new Json<String>(HttpStatus.INTERNAL_SERVER_ERROR.value(), msg).setId(ssid);
-        log.error(StrUtil.format("【公共组件】请求{},请求失败,失败的原因为：{}", ssid, msg), e);
+        log.error(StrUtil.format("【Plus组件】请求{},请求失败,失败的原因为：{}", ssid, msg), e);
         return response;
     }
 
@@ -169,7 +169,7 @@ public class WebExceptionAutoConfiguration {
         String ssid = this.getRequestId(request);
         String msg = e.getMessage();
         Json<String> response = new Json<String>(HttpStatus.INTERNAL_SERVER_ERROR.value(), msg).setId(ssid);
-        log.error(StrUtil.format("【公共组件】请求{},请求失败,失败的原因为：{}", ssid, msg), e);
+        log.error(StrUtil.format("【Plus组件】请求{},请求失败,失败的原因为：{}", ssid, msg), e);
         return response;
     }
 
@@ -179,7 +179,7 @@ public class WebExceptionAutoConfiguration {
                                                                 MissingServletRequestParameterException e) {
         String ssid = this.getRequestId(request);
         Json<String> response = new Json<String>(HttpStatus.BAD_REQUEST.value(), StrUtil.blankToDefault(e.getMessage(), "请求参数有误")).setId(ssid);
-        log.error(StrUtil.format("【公共组件】请求{},请求参数有误,失败的原因为：{}", ssid, e.getMessage()), e);
+        log.error(StrUtil.format("【Plus组件】请求{},请求参数有误,失败的原因为：{}", ssid, e.getMessage()), e);
         return response;
     }
 
@@ -189,7 +189,7 @@ public class WebExceptionAutoConfiguration {
                                                             MethodArgumentTypeMismatchException e) {
         String ssid = this.getRequestId(request);
         Json<String> response = new Json<String>(HttpStatus.BAD_REQUEST.value(), StrUtil.blankToDefault(e.getMessage(), "请求参数有误")).setId(ssid);
-        log.error(StrUtil.format("【公共组件】请求{},方法参数有误,失败的原因为：{}", ssid, e.getMessage()), e);
+        log.error(StrUtil.format("【Plus组件】请求{},方法参数有误,失败的原因为：{}", ssid, e.getMessage()), e);
         return response;
     }
 
@@ -206,7 +206,7 @@ public class WebExceptionAutoConfiguration {
     public Object handle(HttpServletRequest request, ValidationException e) {
         String ssid = this.getRequestId(request);
         Json<String> response = new Json<String>(HttpStatus.BAD_REQUEST.value(), StrUtil.blankToDefault(e.getMessage(), "非法参数")).setId(ssid);
-        log.error(StrUtil.format("【公共组件】请求{},参数校验有误,失败的原因为：{}", ssid, e.getMessage()), e);
+        log.error(StrUtil.format("【Plus组件】请求{},参数校验有误,失败的原因为：{}", ssid, e.getMessage()), e);
         return response;
     }
 
@@ -223,7 +223,7 @@ public class WebExceptionAutoConfiguration {
     public Object handle(HttpServletRequest request, ConstraintViolationException e) {
         String ssid = this.getRequestId(request);
         Json<String> response = new Json<String>(HttpStatus.BAD_REQUEST.value(), StrUtil.blankToDefault(e.getMessage(), "非法参数")).setId(ssid);
-        log.error(StrUtil.format("【公共组件】请求{},参数约束有误,失败的原因为：{}", ssid, e.getMessage()), e);
+        log.error(StrUtil.format("【Plus组件】请求{},参数约束有误,失败的原因为：{}", ssid, e.getMessage()), e);
         return response;
     }
 
@@ -240,7 +240,7 @@ public class WebExceptionAutoConfiguration {
         String ssid = this.getRequestId(request);
         Json<String> response = new Json<String>(HttpStatus.INTERNAL_SERVER_ERROR.value(), StrUtil.blankToDefault(e.getMessage(), "未查询到对应的数据"))
                 .setId(ssid);
-        log.error(StrUtil.format("【公共组件】请求{},请求失败,出现数组越界,失败的原因为：{}", ssid, e.getMessage()), e);
+        log.error(StrUtil.format("【Plus组件】请求{},请求失败,出现数组越界,失败的原因为：{}", ssid, e.getMessage()), e);
         return response;
     }
 
@@ -257,7 +257,7 @@ public class WebExceptionAutoConfiguration {
         String ssid = this.getRequestId(request);
         Json<String> response = new Json<String>(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage())
                 .setId(ssid);
-        log.error(StrUtil.format("【公共组件】请求{},请求失败,失败的原因为：{}", ssid, e.getMessage()), e);
+        log.error(StrUtil.format("【Plus组件】请求{},请求失败,失败的原因为：{}", ssid, e.getMessage()), e);
         return response;
     }
 
@@ -273,7 +273,7 @@ public class WebExceptionAutoConfiguration {
     public Object handleIllegalStateException(HttpServletRequest request, IllegalStateException e) {
         String ssid = this.getRequestId(request);
         Json<Object> response = Json.error(ErrorUtil.getErrorMsg(e, "请求失败")).setId(ssid);
-        log.error(StrUtil.format("【公共组件】请求{}，请求失败,拦截到未知异常：{}", ssid, e.getMessage()), e);
+        log.error(StrUtil.format("【Plus组件】请求{}，请求失败,拦截到未知异常：{}", ssid, e.getMessage()), e);
         return response;
     }
 
@@ -283,7 +283,7 @@ public class WebExceptionAutoConfiguration {
         String ssid = this.getRequestId(request);
         Json<Object> response = new Json<>(ErrorUtil.getErrorCode(e, ResultEnum.BIZ_ERROR.getCode()),
                 ErrorUtil.getErrorMsg(e, "请求失败")).setId(ssid);
-        log.error(StrUtil.format("【公共组件】请求{},请求失败,拦截到SQLSyntaxErrorException异常：{}", ssid, e.getMessage()), e);
+        log.error(StrUtil.format("【Plus组件】请求{},请求失败,拦截到SQLSyntaxErrorException异常：{}", ssid, e.getMessage()), e);
         return response;
     }
 
@@ -293,7 +293,7 @@ public class WebExceptionAutoConfiguration {
         String ssid = this.getRequestId(request);
         Json<Object> response = new Json<>(ErrorUtil.getErrorCode(e, ResultEnum.BIZ_ERROR.getCode()),
                 ErrorUtil.getErrorMsg(e, "请求失败")).setId(ssid);
-        log.error(StrUtil.format("【公共组件】请求{},请求失败,拦截到SQLException异常：{}", ssid, e.getMessage()), e);
+        log.error(StrUtil.format("【Plus组件】请求{},请求失败,拦截到SQLException异常：{}", ssid, e.getMessage()), e);
         return response;
     }
 
@@ -310,7 +310,7 @@ public class WebExceptionAutoConfiguration {
     public Object handleException(HttpServletRequest request, NoHandlerFoundException e) {
         String ssid = this.getRequestId(request);
         Json<Object> response = new Json<>(404, e.getMessage()).setId(ssid);
-        log.error(StrUtil.format("【公共组件】请求{},请求失败,拦截到未找到处理程序异常：{}", ssid, e.getMessage()), e);
+        log.error(StrUtil.format("【Plus组件】请求{},请求失败,拦截到未找到处理程序异常：{}", ssid, e.getMessage()));
         return response;
     }
 
@@ -323,7 +323,7 @@ public class WebExceptionAutoConfiguration {
         String ssid = this.getRequestId(request);
         if (e.getBindingResult().getFieldErrors().size() > 0) {
             String defaultMessage = e.getBindingResult().getFieldErrors().get(0).getDefaultMessage();
-            log.error(StrUtil.format("【公共组件】请求{},请求失败,拦截到参数校验异常：{}", ssid, e.getMessage()), e);
+            log.error(StrUtil.format("【Plus组件】请求{},请求失败,拦截到参数校验异常：{}", ssid, e.getMessage()), e);
             return new Json<>(ResultEnum.INVALID_PARAMS.getCode(), defaultMessage).setId(ssid);
         }
         return Json.error(e.getMessage());
@@ -336,7 +336,7 @@ public class WebExceptionAutoConfiguration {
     @ExceptionHandler(value = MaxUploadSizeExceededException.class)
     public Json<Object> processException(HttpServletRequest request, MaxUploadSizeExceededException e) {
         String ssid = this.getRequestId(request);
-        log.error(StrUtil.format("【公共组件】请求{},请求失败,拦截到文件上传超过限制异常：{}", ssid, e.getMessage()), e);
+        log.error(StrUtil.format("【Plus组件】请求{},请求失败,拦截到文件上传超过限制异常：{}", ssid, e.getMessage()), e);
         return new Json<>(ResultEnum.BAD_REQUEST.getCode(), e.getMessage()).setId(ssid);
     }
 
@@ -353,7 +353,7 @@ public class WebExceptionAutoConfiguration {
         String ssid = this.getRequestId(request);
         Json<Object> response = new Json<>(ErrorUtil.getErrorCode(e, ResultEnum.BIZ_ERROR.getCode()),
                 ErrorUtil.getErrorMsg(e, "请求失败")).setId(ssid);
-        log.error(StrUtil.format("【公共组件】请求{},请求失败,拦截到运行时异常：{}", ssid, e.getMessage()), e);
+        log.error(StrUtil.format("【Plus组件】请求{},请求失败,拦截到运行时异常：{}", ssid, e.getMessage()), e);
         return response;
     }
 
@@ -370,7 +370,7 @@ public class WebExceptionAutoConfiguration {
         String ssid = this.getRequestId(request);
         Json<Object> response = new Json<>(ErrorUtil.getErrorCode(e, ResultEnum.SYS_ERROR.getCode()),
                 ErrorUtil.getErrorMsg(e, "请求失败")).setId(ssid);
-        log.error(StrUtil.format("【公共组件】请求{},请求失败,拦截到未知异常：{}", ssid, e.getMessage()), e);
+        log.error(StrUtil.format("【Plus组件】请求{},请求失败,拦截到未知异常：{}", ssid, e.getMessage()), e);
         return response;
     }
 
@@ -381,13 +381,12 @@ public class WebExceptionAutoConfiguration {
      * @return 请求的ID
      */
     private String getRequestId(HttpServletRequest request) {
-        String ssid = (String) request.getAttribute(webProperties.getSsidName());
-        return StrUtil.isBlank(ssid) ? UUID.randomUUID().toString() : ssid;
+        return UUID.randomUUID().toString();
     }
 
     @PostConstruct
     public void checkConfig() {
-        log.debug("【公共组件】: 开启 <全局异常拦截> 相关的配置");
+        log.debug("【Plus组件】: 开启 <全局异常拦截> 相关的配置");
     }
 
 }

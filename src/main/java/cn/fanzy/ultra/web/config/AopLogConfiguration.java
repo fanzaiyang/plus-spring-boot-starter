@@ -120,7 +120,7 @@ public class AopLogConfiguration {
     @PostConstruct
     public void checkConfig() {
 
-        log.debug("【公共组件】: 开启 <全局参数校验功能> 相关的配置");
+        log.debug("【Plus组件】: 开启 <全局参数校验功能> 相关的配置");
     }
 
     /**
