@@ -13,6 +13,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -41,6 +42,9 @@ import java.util.stream.Collectors;
 @ConditionalOnProperty(prefix = "plus.aop.log", name = {"enable"}, havingValue = "true", matchIfMissing = true)
 @Slf4j
 public class AopLogConfiguration {
+
+    @Autowired
+    private AopLogProperties aopLogProperties;
 
     /**
      * 定义切入点
@@ -99,11 +103,9 @@ public class AopLogConfiguration {
             }
         }
         Object proceed = joinPoint.proceed();
-        log.info("\n->IP【{}】访问【{}】执行【{}-{}】({}.{})\n    请求【{}】\n    响应【{}】",
-                getRemoteHost(request), request.getRequestURL(),
-                classCommentName, methodCommentName,
-                signature.getDeclaringTypeName(), signature.getName(),
-                JSONUtil.toJsonStr(param),JSONUtil.toJsonStr(proceed));
+        log.info(aopLogProperties.getFormat(),
+                getRemoteHost(request), request.getRequestURL(),classCommentName +"-"+ methodCommentName,signature.getDeclaringTypeName() + "." + signature.getName(),
+                JSONUtil.toJsonStr(param), JSONUtil.toJsonStr(proceed));
         return proceed;
     }
 
@@ -117,7 +119,6 @@ public class AopLogConfiguration {
      * 获取目标主机的ip
      *
      * @param request HttpServletRequest
-     * @return String
      * @return String
      */
     private String getRemoteHost(HttpServletRequest request) {
