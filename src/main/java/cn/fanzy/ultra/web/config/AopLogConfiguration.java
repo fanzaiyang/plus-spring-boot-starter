@@ -1,7 +1,7 @@
 package cn.fanzy.ultra.web.config;
 
 import cn.fanzy.ultra.swagger.SwaggerProperties;
-import cn.fanzy.ultra.web.properties.ValidProperties;
+import cn.fanzy.ultra.web.properties.AopLogProperties;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
@@ -24,8 +24,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -37,8 +38,8 @@ import java.util.stream.Collectors;
  */
 @Configuration
 @Aspect
-@EnableConfigurationProperties(ValidProperties.class)
-@ConditionalOnProperty(prefix = "plus.aop", name = {"enable"}, havingValue = "true", matchIfMissing = true)
+@EnableConfigurationProperties(AopLogProperties.class)
+@ConditionalOnProperty(prefix = "plus.aop.log", name = {"enable"}, havingValue = "true", matchIfMissing = true)
 @Slf4j
 public class AopLogConfiguration {
 
@@ -69,10 +70,6 @@ public class AopLogConfiguration {
         if (CollUtil.isNotEmpty(list)) {
             return;
         }
-        // ip地址
-        String ipAddr = getRemoteHost(request);
-        // 请求路径
-        String requestUrl = request.getRequestURL().toString();
 
         // 获取请求参数进行打印
         Signature signature = joinPoint.getSignature();
@@ -93,28 +90,25 @@ public class AopLogConfiguration {
         // swagger中文注释名
         ApiOperation operation = methodSignature.getMethod().getAnnotation(ApiOperation.class);
         String methodCommentName = "";
-        if (api != null) {
+        if (operation != null) {
             methodCommentName = operation.value();
         }
         String methodName = signature.getName() + (StrUtil.isBlank(methodCommentName) ? "" : "[" + methodCommentName + "]");
         // 参数名数组
         String[] parameterNames = ((MethodSignature) signature).getParameterNames();
         // 构造参数组集合
-        List<Object> argList = new ArrayList<>();
-        for (Object arg : joinPoint.getArgs()) {
-            // request/response无法使用toJSON
-            if (arg instanceof HttpServletRequest) {
-                argList.add("HttpServletRequest");
-            } else if (arg instanceof HttpServletResponse) {
-                argList.add("HttpServletResponse");
-            } else {
-                argList.add(JSONUtil.parse(arg));
+        Map<String, Object> param = new HashMap<>();
+        for (int i = 0; i < parameterNames.length; i++) {
+            Object arg = joinPoint.getArgs()[i];
+            if (!(arg instanceof HttpServletRequest || arg instanceof HttpServletResponse)) {
+                param.put(parameterNames[i], arg);
             }
         }
-        log.info("请求源IP【{}】 -> 请求URL【{}】->执行方法：{}.{} -> 原始请求参数：{} -> {}",
-                ipAddr, requestUrl,
-                className, methodName,
-                JSONUtil.toJsonStr(parameterNames), JSONUtil.toJsonStr(argList));
+        log.info("\n->请求源IP【{}】\n->请求URL【{}】\n->业务名称【{}/{}】执行方法：{}.{}\n->请求参数【{}】",
+                getRemoteHost(request), request.getRequestURI(),
+                classCommentName, methodCommentName,
+                signature.getDeclaringTypeName(), signature.getName(),
+                JSONUtil.toJsonStr(param));
     }
 
     @PostConstruct

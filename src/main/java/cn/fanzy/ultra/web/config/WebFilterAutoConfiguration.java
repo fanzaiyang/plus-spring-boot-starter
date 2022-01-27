@@ -1,6 +1,7 @@
 package cn.fanzy.ultra.web.config;
 
 import cn.fanzy.ultra.model.Json;
+import cn.fanzy.ultra.utils.ErrorUtil;
 import cn.fanzy.ultra.utils.HttpUtil;
 import cn.fanzy.ultra.web.properties.WebFilterProperties;
 import cn.hutool.core.util.IdUtil;
@@ -52,14 +53,7 @@ public class WebFilterAutoConfiguration {
                 chain.doFilter(request, response);
             } catch (Exception e) {
                 log.error("发生系统异常！", e);
-                String message = e.getMessage();
-                if (e.getCause() != null) {
-                    message = e.getCause().getMessage();
-                    if (e.getCause().getCause() != null) {
-                        message = e.getCause().getCause().getMessage();
-                    }
-                }
-                HttpUtil.out((HttpServletResponse) response, Json.error(message).setData(e.getCause()));
+                HttpUtil.out((HttpServletResponse) response, Json.error(ErrorUtil.getErrorMsg(e)).setData(e.getCause()));
             }
 
         };

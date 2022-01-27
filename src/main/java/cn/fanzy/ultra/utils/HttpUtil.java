@@ -38,12 +38,26 @@ public class HttpUtil {
     }
 
     /**
-     * 将指定的信息按照json格式输出到指定的响应
+     * 根据data判断返回JSON还是Html
      *
      * @param response 响应
      * @param data     输出的指定信息
      */
     public synchronized static void out(HttpServletResponse response, Object data) {
+        if (data instanceof String) {
+            outWeb(response, data.toString());
+            return;
+        }
+        outJson(response, data);
+    }
+
+    /**
+     * 将指定的信息按照json格式输出到指定的响应
+     *
+     * @param response 响应
+     * @param data     输出的指定信息
+     */
+    public synchronized static void outJson(HttpServletResponse response, Object data) {
         response.setStatus(HttpStatus.OK.value());
         // 允许跨域访问的域，可以是一个域的列表，也可以是通配符"*"
         response.setHeader("Access-Control-Allow-Origin", "*");
@@ -56,6 +70,32 @@ public class HttpUtil {
         response.setCharacterEncoding("UTF-8");
         try {
             response.getWriter().write(MAPPER.writeValueAsString(data));
+            response.getWriter().flush();
+            response.getWriter().close();
+        } catch (Exception e) {
+            log.info("返回响应数据时出现问题，出现问题的原因为 {}", e.getMessage());
+        }
+    }
+
+    /**
+     * 将指定的Html片段输出到指定的响应
+     *
+     * @param response 响应
+     * @param html     Html片段输
+     */
+    public synchronized static void outWeb(HttpServletResponse response, String html) {
+        response.setStatus(HttpStatus.OK.value());
+        // 允许跨域访问的域，可以是一个域的列表，也可以是通配符"*"
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        // 允许使用的请求方法，以逗号隔开
+        response.setHeader("Access-Control-Allow-Methods", "*");
+        // 是否允许请求带有验证信息，
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Headers", "*");
+        response.setContentType("text/html;charset=UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        try {
+            response.getWriter().write(html);
             response.getWriter().flush();
             response.getWriter().close();
         } catch (Exception e) {
@@ -109,6 +149,7 @@ public class HttpUtil {
     public static String getRequestId() {
         return UUID.randomUUID().toString();
     }
+
     /**
      * 下载
      *

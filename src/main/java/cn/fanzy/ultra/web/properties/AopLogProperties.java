@@ -12,11 +12,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author fanzaiyang
  * @since 2021/09/06
  */
-@ConfigurationProperties(prefix = "plus.aop")
+@ConfigurationProperties(prefix = "plus.aop.log")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ValidProperties {
+public class AopLogProperties {
 
     /**
      * 是否开启全局参数校验拦截,默认为true
