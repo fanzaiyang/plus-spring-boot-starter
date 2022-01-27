@@ -7,9 +7,7 @@ import cn.hutool.core.collection.CollUtil;
 import com.github.xiaoymin.knife4j.core.extend.OpenApiExtendSetting;
 import com.github.xiaoymin.knife4j.core.model.MarkdownProperty;
 import com.github.xiaoymin.knife4j.spring.configuration.Knife4jHttpBasic;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.io.Serializable;
@@ -24,9 +22,6 @@ import java.util.List;
  * @since  2021/09/07
  */
 @ConfigurationProperties(prefix = "plus.swagger")
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class SwaggerProperties {
     public static final List<String> SWAGGER_LIST = CollUtil.toList("/doc.html", "/swagger-resources/**", "/webjars/**", "/favicon.ico", "/error");
     /**
@@ -160,4 +155,99 @@ public class SwaggerProperties {
         private List<MarkdownProperty> documents;
     }
 
+    public Boolean getEnable() {
+        return enable;
+    }
+
+    public void setEnable(Boolean enable) {
+        this.enable = enable;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getTermsOfServiceUrl() {
+        return termsOfServiceUrl;
+    }
+
+    public void setTermsOfServiceUrl(String termsOfServiceUrl) {
+        this.termsOfServiceUrl = termsOfServiceUrl;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public String getContactUser() {
+        return contactUser;
+    }
+
+    public void setContactUser(String contactUser) {
+        this.contactUser = contactUser;
+    }
+
+    public String getContactUrl() {
+        return contactUrl;
+    }
+
+    public void setContactUrl(String contactUrl) {
+        this.contactUrl = contactUrl;
+    }
+
+    public String getContactEmail() {
+        return contactEmail;
+    }
+
+    public void setContactEmail(String contactEmail) {
+        this.contactEmail = contactEmail;
+    }
+
+    public List<AuthoriZationPar> getAuths() {
+        return auths;
+    }
+
+    public void setAuths(List<AuthoriZationPar> auths) {
+        this.auths = auths;
+    }
+
+    public Boolean getShowDeatil() {
+        return showDeatil;
+    }
+
+    public void setShowDeatil(Boolean showDeatil) {
+        this.showDeatil = showDeatil;
+    }
+
+    public Knife4jProperties getKnife4j() {
+        return knife4j;
+    }
+
+    public void setKnife4j(Knife4jProperties knife4j) {
+        this.knife4j = knife4j;
+    }
 }
