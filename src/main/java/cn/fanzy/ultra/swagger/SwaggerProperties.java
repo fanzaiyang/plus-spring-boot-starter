@@ -19,9 +19,7 @@ import java.util.List;
 
 /**
  * swagger扩展支持属性配置
- *<pre>
- *     powered by <a href="https://gitee.com/zhiyubujian/common-starter">https://gitee.com/zhiyubujian/common-starter</a>
- *</pre>
+ *
  * @author fanzaiyang
  * @since  2021/09/07
  */
