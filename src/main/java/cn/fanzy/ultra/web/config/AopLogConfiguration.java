@@ -3,15 +3,14 @@ package cn.fanzy.ultra.web.config;
 import cn.fanzy.ultra.swagger.SwaggerProperties;
 import cn.fanzy.ultra.web.properties.AopLogProperties;
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -60,15 +59,15 @@ public class AopLogConfiguration {
      *
      * @param joinPoint JoinPoint
      */
-    @Before(value = "pointCut()")
-    public void before(JoinPoint joinPoint) {
+    @Around(value = "pointCut()")
+    public Object before(ProceedingJoinPoint joinPoint) throws Throwable {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         // 忽略swagger的日志
         AntPathMatcher matcher = new AntPathMatcher();
         List<String> list = SwaggerProperties.SWAGGER_LIST.stream().filter(item -> matcher.match(item, request.getRequestURI()))
                 .collect(Collectors.toList());
         if (CollUtil.isNotEmpty(list)) {
-            return;
+            return joinPoint.proceed();
         }
 
         // 获取请求参数进行打印
@@ -82,10 +81,6 @@ public class AopLogConfiguration {
         if (api != null) {
             classCommentName = api.tags()[0];
         }
-
-        String[] sourceName = signature.getDeclaringTypeName().split("\\.");
-        String className = sourceName[sourceName.length - 1] +
-                (StrUtil.isBlank(classCommentName) ? "" : "[" + classCommentName + "]");
         // 方法名
         // swagger中文注释名
         ApiOperation operation = methodSignature.getMethod().getAnnotation(ApiOperation.class);
@@ -93,7 +88,6 @@ public class AopLogConfiguration {
         if (operation != null) {
             methodCommentName = operation.value();
         }
-        String methodName = signature.getName() + (StrUtil.isBlank(methodCommentName) ? "" : "[" + methodCommentName + "]");
         // 参数名数组
         String[] parameterNames = ((MethodSignature) signature).getParameterNames();
         // 构造参数组集合
@@ -104,11 +98,13 @@ public class AopLogConfiguration {
                 param.put(parameterNames[i], arg);
             }
         }
-        log.info("\n->请求源IP【{}】\n->请求URL【{}】\n->业务名称【{}/{}】执行方法：{}.{}\n->请求参数【{}】",
-                getRemoteHost(request), request.getRequestURI(),
+        Object proceed = joinPoint.proceed();
+        log.info("\n->IP【{}】访问【{}】执行【{}-{}】({}.{})\n    请求【{}】\n    响应【{}】",
+                getRemoteHost(request), request.getRequestURL(),
                 classCommentName, methodCommentName,
                 signature.getDeclaringTypeName(), signature.getName(),
-                JSONUtil.toJsonStr(param));
+                JSONUtil.toJsonStr(param),JSONUtil.toJsonStr(proceed));
+        return proceed;
     }
 
     @PostConstruct
