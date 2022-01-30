@@ -2,6 +2,7 @@ package cn.fanzy.ultra.web.config;
 
 import cn.fanzy.ultra.swagger.SwaggerProperties;
 import cn.fanzy.ultra.web.properties.AopLogProperties;
+import cn.fanzy.ultra.web.service.LogUserService;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.json.JSONUtil;
 import io.swagger.annotations.Api;
@@ -45,7 +46,8 @@ public class AopLogConfiguration {
 
     @Autowired
     private AopLogProperties aopLogProperties;
-
+    @Autowired
+    private LogUserService logUserService;
     /**
      * 定义切入点
      */
@@ -104,8 +106,13 @@ public class AopLogConfiguration {
         }
         Object proceed = joinPoint.proceed();
         log.info(aopLogProperties.getFormat(),
-                getRemoteHost(request), request.getRequestURL(),classCommentName +"-"+ methodCommentName,signature.getDeclaringTypeName() + "." + signature.getName(),
-                JSONUtil.toJsonStr(param), JSONUtil.toJsonStr(proceed));
+                getRemoteHost(request),
+                logUserService.getCurrentUser(),
+                request.getRequestURL(),
+                classCommentName + "-" + methodCommentName,
+                signature.getDeclaringTypeName() + "." + signature.getName(),
+                JSONUtil.toJsonStr(param),
+                JSONUtil.toJsonStr(proceed));
         return proceed;
     }
 

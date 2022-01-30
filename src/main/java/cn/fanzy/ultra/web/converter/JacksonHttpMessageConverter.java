@@ -1,4 +1,4 @@
-package cn.fanzy.ultra.web.config;
+package cn.fanzy.ultra.web.converter;
 
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -121,7 +121,7 @@ public class JacksonHttpMessageConverter extends MappingJackson2HttpMessageConve
 
     }
 
-    JacksonHttpMessageConverter() {
+    public JacksonHttpMessageConverter() {
         getObjectMapper().setSerializerFactory(getObjectMapper().getSerializerFactory().withSerializerModifier(new MyBeanSerializerModifier()));
     }
 }

@@ -1,5 +1,6 @@
 package cn.fanzy.ultra.web.config;
 
+import cn.fanzy.ultra.web.converter.JacksonHttpMessageConverter;
 import cn.fanzy.ultra.web.properties.JsonProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

@@ -7,4 +7,5 @@ cn.fanzy.ultra.web.config.CorsAutoConfiguration,\
 cn.fanzy.ultra.swagger.Swagger2AutoConfiguration,\
 cn.fanzy.ultra.web.config.SaTokenWebExceptionAutoConfiguration,\
   cn.fanzy.ultra.web.config.PropertyWebConfiguration,\
-cn.fanzy.ultra.web.config.JacksonHttpMessageConfig
+cn.fanzy.ultra.web.config.JacksonHttpMessageConfig,\
+  cn.fanzy.ultra.web.config.LogUserConfig
