@@ -21,6 +21,6 @@ public class PropertyWebConfiguration {
      */
     @PostConstruct
     public void checkConfig() {
-        log.debug("【Plus组件】: 开启 <配置文件> 相关的配置");
+        log.debug("【Plus组件】: 开启 <自定义配置文件> 相关的配置");
     }
 }
