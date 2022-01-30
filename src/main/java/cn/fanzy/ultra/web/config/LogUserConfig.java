@@ -1,6 +1,6 @@
 package cn.fanzy.ultra.web.config;
 
-import cn.fanzy.ultra.web.service.DefaultLogUserServiceImpl;
+import cn.fanzy.ultra.web.service.LogCallbackService;
 import cn.fanzy.ultra.web.service.LogUserService;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -15,6 +15,14 @@ public class LogUserConfig {
     @Bean
     @ConditionalOnMissingBean
     public LogUserService logUserService() {
-        return new DefaultLogUserServiceImpl();
+        return () -> "未登录用户";
     }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public LogCallbackService logCallbackService() {
+        return (ip, user, url, method, swaggerName, requestData, responseData, second) -> {
+        };
+    }
+
 }

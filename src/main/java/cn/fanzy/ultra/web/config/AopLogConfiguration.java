@@ -2,8 +2,11 @@ package cn.fanzy.ultra.web.config;
 
 import cn.fanzy.ultra.swagger.SwaggerProperties;
 import cn.fanzy.ultra.web.properties.AopLogProperties;
+import cn.fanzy.ultra.web.service.LogCallbackService;
 import cn.fanzy.ultra.web.service.LogUserService;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.date.TimeInterval;
 import cn.hutool.json.JSONUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -48,6 +51,9 @@ public class AopLogConfiguration {
     private AopLogProperties aopLogProperties;
     @Autowired
     private LogUserService logUserService;
+    @Autowired
+    private LogCallbackService logCallbackService;
+
     /**
      * 定义切入点
      */
@@ -67,6 +73,7 @@ public class AopLogConfiguration {
      */
     @Around(value = "pointCut()")
     public Object before(ProceedingJoinPoint joinPoint) throws Throwable {
+        TimeInterval interval = DateUtil.timer();
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         // 忽略swagger的日志
         AntPathMatcher matcher = new AntPathMatcher();
@@ -112,7 +119,18 @@ public class AopLogConfiguration {
                 classCommentName + "-" + methodCommentName,
                 signature.getDeclaringTypeName() + "." + signature.getName(),
                 JSONUtil.toJsonStr(param),
-                JSONUtil.toJsonStr(proceed));
+                JSONUtil.toJsonStr(proceed),
+                interval.intervalSecond());
+        try {
+            logCallbackService.callback(getRemoteHost(request), logUserService.getCurrentUser(), request.getRequestURL().toString(),
+                    signature.getDeclaringTypeName() + "." + signature.getName(),
+                    classCommentName + "->" + methodCommentName,
+                    JSONUtil.toJsonStr(param), JSONUtil.toJsonStr(proceed),
+                    interval.intervalSecond()
+            );
+        } catch (Exception e) {
+            log.error("执行回调失败！", e);
+        }
         return proceed;
     }
 

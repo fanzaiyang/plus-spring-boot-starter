@@ -12,5 +12,5 @@ public interface LogUserService {
      *
      * @return {@link String}
      */
-    String getCurrentUser();
+   String getCurrentUser();
 }
