@@ -3,6 +3,8 @@ package com.example.demo.controller;
 import cn.fanzy.ultra.annotation.PathRestController;
 import cn.fanzy.ultra.model.Json;
 import cn.fanzy.ultra.utils.HttpUtil;
+import cn.fanzy.ultra.utils.SpringUtils;
+import cn.hutool.core.thread.ThreadUtil;
 import com.example.demo.args.DemoArgs;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import com.github.xiaoymin.knife4j.annotations.ApiSupport;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 @Api(tags = {"测试"})
 @ApiSupport(author = "范在阳",order = 1)
@@ -46,7 +50,11 @@ public class DemoController {
 
     @GetMapping("/outweb")
     public void outWeb(String args, HttpServletResponse response){
-
+        ThreadUtil.safeSleep(3000);
+        String activeProfile = SpringUtils.getActiveProfile();
+        String[] activeProfiles = SpringUtils.getActiveProfiles();
+        System.out.println(activeProfile);
+        System.out.println(Arrays.stream(activeProfiles).collect(Collectors.joining(",")));
         HttpUtil.outWeb(response,"<h1>Hello,Web!"+args+"</h1>");
     }
 
