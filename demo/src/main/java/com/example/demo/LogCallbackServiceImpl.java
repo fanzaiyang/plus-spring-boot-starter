@@ -1,7 +1,7 @@
 package com.example.demo;
 
-import cn.fanzy.ultra.utils.LogOutUtil;
-import cn.fanzy.ultra.logs.service.LogCallbackService;
+import cn.fanzy.plus.utils.LogOutUtil;
+import cn.fanzy.plus.logs.service.LogCallbackService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

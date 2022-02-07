@@ -1,9 +1,9 @@
 package com.example.demo.controller;
 
-import cn.fanzy.ultra.annotation.PathRestController;
-import cn.fanzy.ultra.model.Json;
-import cn.fanzy.ultra.utils.HttpUtil;
-import cn.fanzy.ultra.utils.SpringUtils;
+import cn.fanzy.plus.annotation.PathRestController;
+import cn.fanzy.plus.model.Json;
+import cn.fanzy.plus.utils.HttpUtil;
+import cn.fanzy.plus.utils.SpringUtils;
 import cn.hutool.core.thread.ThreadUtil;
 import com.example.demo.args.DemoArgs;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;

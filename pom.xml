@@ -8,11 +8,11 @@
         <version>2.4.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>cn.fanzy.ultra</groupId>
-    <artifactId>ultra-spring-boot-starter</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>ultra-spring-boot-starter</name>
-    <description>ultra-spring-boot-starter</description>
+    <groupId>cn.fanzy.plus</groupId>
+    <artifactId>plus-spring-boot-starter</artifactId>
+    <version>1.0.0</version>
+    <name>plus-spring-boot-starter</name>
+    <description>plus-spring-boot-starter</description>
     <properties>
         <java.version>1.8</java.version>
     </properties>
