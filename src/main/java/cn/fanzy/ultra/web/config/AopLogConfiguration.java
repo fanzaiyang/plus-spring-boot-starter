@@ -3,11 +3,11 @@ package cn.fanzy.ultra.web.config;
 import cn.fanzy.ultra.swagger.SwaggerProperties;
 import cn.fanzy.ultra.web.properties.AopLogProperties;
 import cn.fanzy.ultra.web.service.LogCallbackService;
-import cn.fanzy.ultra.web.service.LogOutService;
 import cn.fanzy.ultra.web.service.LogUserService;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.TimeInterval;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,10 +29,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -50,13 +47,9 @@ import java.util.stream.Collectors;
 public class AopLogConfiguration {
 
     @Autowired
-    private AopLogProperties aopLogProperties;
-    @Autowired
     private LogUserService logUserService;
     @Autowired
     private LogCallbackService logCallbackService;
-    @Autowired
-    private LogOutService logOutService;
 
     /**
      * 定义切入点
@@ -92,12 +85,14 @@ public class AopLogConfiguration {
         Signature signature = joinPoint.getSignature();
         MethodSignature methodSignature = (MethodSignature) signature;
 
+        String swaggerName = "";
         // 类名
         // swagger中文注释名
         Api api = methodSignature.getMethod().getDeclaringClass().getAnnotation(Api.class);
         String classCommentName = "";
         if (api != null) {
-            classCommentName = api.tags()[0];
+            classCommentName = Arrays.stream(api.tags()).collect(Collectors.joining(","));
+            swaggerName = classCommentName;
         }
         // 方法名
         // swagger中文注释名
@@ -105,6 +100,7 @@ public class AopLogConfiguration {
         String methodCommentName = "";
         if (operation != null) {
             methodCommentName = operation.value();
+            swaggerName = StrUtil.isBlank(swaggerName) ? methodCommentName : swaggerName + "->" + methodCommentName;
         }
         // 参数名数组
         String[] parameterNames = ((MethodSignature) signature).getParameterNames();
@@ -118,17 +114,12 @@ public class AopLogConfiguration {
         }
         Object proceed = joinPoint.proceed();
         Date end = new Date();
-        logOutService.callback(getRemoteHost(request), logUserService.getCurrentUser(), request.getRequestURL().toString(),
-                signature.getDeclaringTypeName() + "." + signature.getName(),
-                classCommentName + "->" + methodCommentName,
-                JSONUtil.toJsonStr(param), JSONUtil.toJsonStr(proceed),
-                start, end,
-                interval.intervalSecond()
-        );
+        String methodName = signature.getDeclaringTypeName() + "." + signature.getName();
+
         try {
             logCallbackService.callback(getRemoteHost(request), logUserService.getCurrentUser(), request.getRequestURL().toString(),
-                    signature.getDeclaringTypeName() + "." + signature.getName(),
-                    classCommentName + "->" + methodCommentName,
+                    methodName,
+                    swaggerName,
                     JSONUtil.toJsonStr(param), JSONUtil.toJsonStr(proceed),
                     start, end,
                     interval.intervalSecond()
