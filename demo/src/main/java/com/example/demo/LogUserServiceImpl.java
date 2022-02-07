@@ -1,6 +1,6 @@
 package com.example.demo;
 
-import cn.fanzy.ultra.web.service.LogUserService;
+import cn.fanzy.ultra.logs.service.LogUserService;
 
 //@Service
 public class LogUserServiceImpl implements LogUserService {

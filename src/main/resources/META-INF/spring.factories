@@ -1,6 +1,6 @@
 # Auto Configure
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-cn.fanzy.ultra.web.config.AopLogConfiguration,\
+cn.fanzy.ultra.logs.config.AopLogConfiguration,\
 cn.fanzy.ultra.web.config.WebExceptionAutoConfiguration,\
 cn.fanzy.ultra.web.config.WebFilterAutoConfiguration,\
 cn.fanzy.ultra.web.config.CorsAutoConfiguration,\
@@ -8,4 +8,4 @@ cn.fanzy.ultra.swagger.Swagger2AutoConfiguration,\
 cn.fanzy.ultra.web.config.SaTokenWebExceptionAutoConfiguration,\
   cn.fanzy.ultra.web.config.PropertyWebConfiguration,\
 cn.fanzy.ultra.web.config.JacksonHttpMessageConfig,\
-  cn.fanzy.ultra.web.config.LogUserConfig
+  cn.fanzy.ultra.logs.config.LogCallbackConfig

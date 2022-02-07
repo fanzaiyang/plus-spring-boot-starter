@@ -1,4 +1,4 @@
-package cn.fanzy.ultra.web.properties;
+package cn.fanzy.ultra.logs.properties;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

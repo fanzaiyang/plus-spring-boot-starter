@@ -1,4 +1,4 @@
-package cn.fanzy.ultra.web.service;
+package cn.fanzy.ultra.logs.service;
 
 /**
  * 日志组件-当前登录人相关

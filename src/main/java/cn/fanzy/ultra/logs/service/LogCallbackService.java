@@ -1,4 +1,4 @@
-package cn.fanzy.ultra.web.service;
+package cn.fanzy.ultra.logs.service;
 
 import java.util.Date;
 

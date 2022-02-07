@@ -1,10 +1,10 @@
-package cn.fanzy.ultra.web.config;
+package cn.fanzy.ultra.logs.config;
 
 import cn.fanzy.ultra.swagger.SwaggerProperties;
 import cn.fanzy.ultra.utils.SpringUtils;
-import cn.fanzy.ultra.web.properties.AopLogProperties;
-import cn.fanzy.ultra.web.service.LogCallbackService;
-import cn.fanzy.ultra.web.service.LogUserService;
+import cn.fanzy.ultra.logs.properties.AopLogProperties;
+import cn.fanzy.ultra.logs.service.LogCallbackService;
+import cn.fanzy.ultra.logs.service.LogUserService;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.TimeInterval;
