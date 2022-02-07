@@ -25,7 +25,7 @@ import java.util.UUID;
 @Slf4j
 public class HttpUtil {
 
-    private static final ObjectMapper MAPPER = new ObjectMapper();
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     /**
      * 携带指定的信息重定向到指定的地址
@@ -34,7 +34,7 @@ public class HttpUtil {
      * @throws IOException 重定向时出现异常
      */
     public synchronized static void redirect(String url) throws IOException {
-        SpringUtil.getResponse().sendRedirect(url);
+        SpringUtils.getResponse().sendRedirect(url);
     }
 
     /**
@@ -69,7 +69,7 @@ public class HttpUtil {
         response.setContentType("application/json;charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
         try {
-            response.getWriter().write(MAPPER.writeValueAsString(data));
+            response.getWriter().write(OBJECT_MAPPER.writeValueAsString(data));
             response.getWriter().flush();
             response.getWriter().close();
         } catch (Exception e) {
