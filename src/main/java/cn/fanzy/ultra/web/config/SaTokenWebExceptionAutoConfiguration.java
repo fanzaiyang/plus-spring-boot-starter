@@ -23,6 +23,7 @@ import java.util.UUID;
 /**
  * 全局异常捕获自动配置
  * 兼容Sa-Token
+ *
  * @author fanzaiyang
  * @since 2021/09/06
  */
@@ -41,7 +42,7 @@ public class SaTokenWebExceptionAutoConfiguration {
     public Object handleRuntimeException(HttpServletRequest request, NotLoginException e) {
         String ssid = this.getRequestId(request);
         Json<Object> response = new Json<>(HttpStatus.UNAUTHORIZED.value(), e.getMessage()).setId(ssid);
-        log.error(StrUtil.format("【Plus组件】请求{},请求失败,拦截到运行时异常：{}", ssid, e.getMessage()), e);
+        log.error(StrUtil.format("【Plus组件】NotLoginException,请求失败,拦截到运行时异常：{}", e.getMessage()), e);
         return response;
     }
 
@@ -50,7 +51,7 @@ public class SaTokenWebExceptionAutoConfiguration {
     public Object handleRuntimeException(HttpServletRequest request, DisableLoginException e) {
         String ssid = this.getRequestId(request);
         Json<Object> response = new Json<>(HttpStatus.UNAUTHORIZED.value(), e.getMessage()).setId(ssid);
-        log.error(StrUtil.format("【Plus组件】请求{},请求失败,拦截到运行时异常：{}", ssid, e.getMessage()), e);
+        log.error(StrUtil.format("【Plus组件】DisableLoginException,请求失败,拦截到运行时异常：{}", e.getMessage()), e);
         return response;
     }
 
@@ -59,7 +60,7 @@ public class SaTokenWebExceptionAutoConfiguration {
     public Object handleRuntimeException(HttpServletRequest request, NotRoleException e) {
         String ssid = this.getRequestId(request);
         Json<Object> response = new Json<>(HttpStatus.FORBIDDEN.value(), e.getMessage()).setId(ssid);
-        log.error(StrUtil.format("【Plus组件】请求{},请求失败,拦截到运行时异常：{}", ssid, e.getMessage()), e);
+        log.error(StrUtil.format("【Plus组件】NotRoleException,请求失败,拦截到运行时异常：{}", e.getMessage()), e);
         return response;
     }
 
@@ -68,7 +69,7 @@ public class SaTokenWebExceptionAutoConfiguration {
     public Object handleRuntimeException(HttpServletRequest request, NotPermissionException e) {
         String ssid = this.getRequestId(request);
         Json<Object> response = new Json<>(HttpStatus.FORBIDDEN.value(), e.getMessage()).setId(ssid);
-        log.error(StrUtil.format("【Plus组件】请求{},请求失败,拦截到运行时异常：{}", ssid, e.getMessage()), e);
+        log.error(StrUtil.format("【Plus组件】NotPermissionException,请求失败,拦截到运行时异常：{}", e.getMessage()), e);
         return response;
     }
 
@@ -77,7 +78,7 @@ public class SaTokenWebExceptionAutoConfiguration {
     public Object handleRuntimeException(HttpServletRequest request, NotSafeException e) {
         String ssid = this.getRequestId(request);
         Json<Object> response = new Json<>(HttpStatus.PRECONDITION_REQUIRED.value(), e.getMessage()).setId(ssid);
-        log.error(StrUtil.format("【Plus组件】请求{},请求失败,拦截到运行时异常：{}", ssid, e.getMessage()), e);
+        log.error(StrUtil.format("【Plus组件】NotSafeException,请求失败,拦截到运行时异常：{}", e.getMessage()), e);
         return response;
     }
 
