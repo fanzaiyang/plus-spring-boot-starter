@@ -26,6 +26,6 @@ public class AopLogProperties {
     /**
      * 日志输出的样式
      */
-    private String format="\n->IP【{}】用户【{}】访问【{}】执行【{}】({})\n    请求【{}】\n    响应【{}】\n    耗时【{}】秒";
+    private String format="\n->IP【{}】用户【{}】访问【{}】执行【{}】({})\n    请求{}【{}】\n    响应{}【{}】\n    耗时【{}】秒";
 
 }

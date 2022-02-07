@@ -8,11 +8,10 @@ import java.util.Date;
  * @author fanzaiyang
  * @since 2022-01-30
  */
-public interface LogCallbackService {
+public interface LogOutService {
 
     /**
-     * 回调
-     * 日志执行回调函数
+     * 日志输出回调函数
      * <pre>实现此方法，可拿到日志调用参数，并进一步加工处理。</pre>
      *
      * @param ip           IP地址

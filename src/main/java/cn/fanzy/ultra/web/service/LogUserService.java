@@ -9,7 +9,7 @@ package cn.fanzy.ultra.web.service;
 public interface LogUserService {
     /**
      * 获取当前用户
-     *
+     * <pre>实现此方法，可重写日志打印的用户名</pre>
      * @return {@link String}
      */
    String getCurrentUser();

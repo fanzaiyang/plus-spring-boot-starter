@@ -3,6 +3,7 @@ package cn.fanzy.ultra.web.config;
 import cn.fanzy.ultra.swagger.SwaggerProperties;
 import cn.fanzy.ultra.web.properties.AopLogProperties;
 import cn.fanzy.ultra.web.service.LogCallbackService;
+import cn.fanzy.ultra.web.service.LogOutService;
 import cn.fanzy.ultra.web.service.LogUserService;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
@@ -28,6 +29,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +55,8 @@ public class AopLogConfiguration {
     private LogUserService logUserService;
     @Autowired
     private LogCallbackService logCallbackService;
+    @Autowired
+    private LogOutService logOutService;
 
     /**
      * 定义切入点
@@ -74,6 +78,7 @@ public class AopLogConfiguration {
     @Around(value = "pointCut()")
     public Object before(ProceedingJoinPoint joinPoint) throws Throwable {
         TimeInterval interval = DateUtil.timer();
+        Date start = new Date();
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         // 忽略swagger的日志
         AntPathMatcher matcher = new AntPathMatcher();
@@ -112,20 +117,20 @@ public class AopLogConfiguration {
             }
         }
         Object proceed = joinPoint.proceed();
-        log.info(aopLogProperties.getFormat(),
-                getRemoteHost(request),
-                logUserService.getCurrentUser(),
-                request.getRequestURL(),
-                classCommentName + "-" + methodCommentName,
+        Date end = new Date();
+        logOutService.callback(getRemoteHost(request), logUserService.getCurrentUser(), request.getRequestURL().toString(),
                 signature.getDeclaringTypeName() + "." + signature.getName(),
-                JSONUtil.toJsonStr(param),
-                JSONUtil.toJsonStr(proceed),
-                interval.intervalSecond());
+                classCommentName + "->" + methodCommentName,
+                JSONUtil.toJsonStr(param), JSONUtil.toJsonStr(proceed),
+                start, end,
+                interval.intervalSecond()
+        );
         try {
             logCallbackService.callback(getRemoteHost(request), logUserService.getCurrentUser(), request.getRequestURL().toString(),
                     signature.getDeclaringTypeName() + "." + signature.getName(),
                     classCommentName + "->" + methodCommentName,
                     JSONUtil.toJsonStr(param), JSONUtil.toJsonStr(proceed),
+                    start, end,
                     interval.intervalSecond()
             );
         } catch (Exception e) {
