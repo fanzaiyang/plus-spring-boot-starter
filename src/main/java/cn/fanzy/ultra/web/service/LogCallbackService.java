@@ -22,9 +22,9 @@ public interface LogCallbackService {
      * @param swaggerName  Swagger的名称
      * @param requestData  请求数据
      * @param responseData 响应数据
-     * @param second       执行秒数
      * @param start        开始时间
      * @param end          结束时间
+     * @param second       执行秒数
      */
     void callback(String ip, String user, String url, String method, String swaggerName, String requestData, String responseData, Date start,Date end, long second);
 }

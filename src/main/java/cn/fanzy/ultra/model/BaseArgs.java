@@ -5,6 +5,12 @@ import cn.fanzy.ultra.utils.SpringUtils;
 import cn.hutool.core.util.NumberUtil;
 import io.swagger.annotations.ApiModelProperty;
 
+/**
+ * 基本参数，分页查询。
+ *
+ * @author fanzaiyang
+ * @since  2022-02-07
+ */
 public class BaseArgs {
 
     @ApiModelProperty(value = "当前页，默认：1", position = -2)

@@ -1,6 +1,7 @@
 package cn.fanzy.ultra.web.config;
 
 import cn.fanzy.ultra.swagger.SwaggerProperties;
+import cn.fanzy.ultra.utils.SpringUtils;
 import cn.fanzy.ultra.web.properties.AopLogProperties;
 import cn.fanzy.ultra.web.service.LogCallbackService;
 import cn.fanzy.ultra.web.service.LogUserService;
@@ -13,7 +14,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -23,13 +23,14 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.AntPathMatcher;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -50,7 +51,7 @@ public class AopLogConfiguration {
     private LogUserService logUserService;
     @Autowired
     private LogCallbackService logCallbackService;
-
+    private static final AntPathMatcher matcher = new AntPathMatcher();
     /**
      * 定义切入点
      */
@@ -69,55 +70,29 @@ public class AopLogConfiguration {
      * @param joinPoint JoinPoint
      */
     @Around(value = "pointCut()")
-    public Object before(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
+        HttpServletRequest request = SpringUtils.getRequest();
         TimeInterval interval = DateUtil.timer();
         Date start = new Date();
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         // 忽略swagger的日志
-        AntPathMatcher matcher = new AntPathMatcher();
         List<String> list = SwaggerProperties.SWAGGER_LIST.stream().filter(item -> matcher.match(item, request.getRequestURI()))
                 .collect(Collectors.toList());
         if (CollUtil.isNotEmpty(list)) {
             return joinPoint.proceed();
         }
+        // 执行的业务名
+        String swaggerName = getApiName((MethodSignature)joinPoint.getSignature());
+        // 执行的方法名
+        String methodName = joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName();
+        // 参数名数组 构造参数组集合
+        Map<String, Object> param = buildReqParam(joinPoint);
 
-        // 获取请求参数进行打印
-        Signature signature = joinPoint.getSignature();
-        MethodSignature methodSignature = (MethodSignature) signature;
-
-        String swaggerName = "";
-        // 类名
-        // swagger中文注释名
-        Api api = methodSignature.getMethod().getDeclaringClass().getAnnotation(Api.class);
-        String classCommentName = "";
-        if (api != null) {
-            classCommentName = Arrays.stream(api.tags()).collect(Collectors.joining(","));
-            swaggerName = classCommentName;
-        }
-        // 方法名
-        // swagger中文注释名
-        ApiOperation operation = methodSignature.getMethod().getAnnotation(ApiOperation.class);
-        String methodCommentName = "";
-        if (operation != null) {
-            methodCommentName = operation.value();
-            swaggerName = StrUtil.isBlank(swaggerName) ? methodCommentName : swaggerName + "->" + methodCommentName;
-        }
-        // 参数名数组
-        String[] parameterNames = ((MethodSignature) signature).getParameterNames();
-        // 构造参数组集合
-        Map<String, Object> param = new HashMap<>();
-        for (int i = 0; i < parameterNames.length; i++) {
-            Object arg = joinPoint.getArgs()[i];
-            if (!(arg instanceof HttpServletRequest || arg instanceof HttpServletResponse)) {
-                param.put(parameterNames[i], arg);
-            }
-        }
+        // 执行程序，并返回结果
         Object proceed = joinPoint.proceed();
-        Date end = new Date();
-        String methodName = signature.getDeclaringTypeName() + "." + signature.getName();
 
+        Date end = new Date();
         try {
-            logCallbackService.callback(getRemoteHost(request), logUserService.getCurrentUser(), request.getRequestURL().toString(),
+            logCallbackService.callback(SpringUtils.getClientIp(request), logUserService.getCurrentUser(), request.getRequestURL().toString(),
                     methodName,
                     swaggerName,
                     JSONUtil.toJsonStr(param), JSONUtil.toJsonStr(proceed),
@@ -130,29 +105,36 @@ public class AopLogConfiguration {
         return proceed;
     }
 
+    private Map<String, Object> buildReqParam(ProceedingJoinPoint joinPoint) {
+        Map<String, Object> param = new HashMap<>();
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        String[] parameterNames = signature.getParameterNames();
+        for (int i = 0; i < parameterNames.length; i++) {
+            Object arg = joinPoint.getArgs()[i];
+            if (!(arg instanceof HttpServletRequest || arg instanceof HttpServletResponse)) {
+                param.put(parameterNames[i], arg);
+            }
+        }
+        return param;
+    }
+    private String getApiName(MethodSignature signature){
+        String swaggerName = "";
+        // 类名 swagger中文注释名
+        Api api = signature.getMethod().getDeclaringClass().getAnnotation(Api.class);
+        if (api != null) {
+            swaggerName = String.join(",", api.tags());
+        }
+        // 方法名  swagger中文注释名
+        ApiOperation operation = signature.getMethod().getAnnotation(ApiOperation.class);
+        if (operation != null) {
+            swaggerName = StrUtil.isBlank(swaggerName) ? operation.value() : swaggerName + "->" + operation.value();
+        }
+        return swaggerName;
+    }
+
     @PostConstruct
     public void checkConfig() {
 
-        log.debug("【Plus组件】: 开启 <全局参数校验功能> 相关的配置");
-    }
-
-    /**
-     * 获取目标主机的ip
-     *
-     * @param request HttpServletRequest
-     * @return String
-     */
-    private String getRemoteHost(HttpServletRequest request) {
-        String ip = request.getHeader("x-forwarded-for");
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("WL-Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getRemoteAddr();
-        }
-        return ip.contains("0:0:0:0:0:0:0:1") ? "127.0.0.1" : ip;
+        log.debug("【Plus组件】: 开启 <全局日志> 相关的配置");
     }
 }
