@@ -18,9 +18,9 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>cn.fanzy.ultra</groupId>
-            <artifactId>ultra-spring-boot-starter</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <groupId>cn.fanzy.plus</groupId>
+            <artifactId>plus-spring-boot-starter</artifactId>
+            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -3,6 +3,7 @@ package cn.fanzy.plus.utils;
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Field;
 
@@ -12,6 +13,7 @@ import java.lang.reflect.Field;
  * @author fanzaiyang
  * @since 2021/09/07
  */
+@Slf4j
 public class ErrorUtil {
 
     /**
@@ -54,12 +56,11 @@ public class ErrorUtil {
         field.setAccessible(true);
         try {
             Object code = field.get(e);
-            System.out.println("错误码：" + code);
             if (ObjectUtil.isValidIfNumber(code)) {
                 return (int) code;
             }
         } catch (IllegalAccessException ex) {
-            ex.printStackTrace();
+            log.error("获取错误码异常！",ex);
         }
         return defaultCode;
     }
@@ -68,13 +69,6 @@ public class ErrorUtil {
      * <p>
      * 根据异常从配置信息中获取异常信息
      * </p>
-     * <p>
-     * 提取过程如下
-     * <ul>
-     * <li>先根据异常类的完整名字获取异常提示信息</li>
-     * <li>如果第一步中没有获取异常信息，则根据异常类的名字(不区分大小)获取异常提示信息</li>
-     * <li>如果还是没有获取到异常提示信息，就是用原来的异常类里的信息</li>
-     * </ul>
      *
      * @param e 异常信息
      * @return 异常提示信息
