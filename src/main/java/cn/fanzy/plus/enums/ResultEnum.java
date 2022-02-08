@@ -3,7 +3,7 @@ package cn.fanzy.plus.enums;
 import lombok.Getter;
 
 /**
- * <h1>错误信息枚举</h1>
+ * 错误信息枚举
  * <pre>
  *     所有业务异常信息
  * </pre>

@@ -68,6 +68,8 @@ public class AopLogConfiguration {
      * 执行环绕通知
      *
      * @param joinPoint JoinPoint
+     * @return {@link Object}
+     * @throws Throwable throwable
      */
     @Around(value = "pointCut()")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
@@ -132,6 +134,9 @@ public class AopLogConfiguration {
         return swaggerName;
     }
 
+    /**
+     * 检查配置
+     */
     @PostConstruct
     public void checkConfig() {
 
