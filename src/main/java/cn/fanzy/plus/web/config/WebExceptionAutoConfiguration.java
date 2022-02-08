@@ -135,7 +135,6 @@ public class WebExceptionAutoConfiguration {
     @ExceptionHandler(NullPointerException.class)
     public Object handleNullPointerException(HttpServletRequest request, NullPointerException e) {
         String ssid = this.getRequestId(request);
-        e.printStackTrace();
         Json<String> response = new Json<String>(HttpStatus.INTERNAL_SERVER_ERROR.value(), StrUtil.blankToDefault(e.getMessage(), "请求失败")).setId(ssid);
         log.error(StrUtil.format("【Plus组件】NullPointerException,请求失败,失败的原因为空指针异常!", ssid), e);
         return response;

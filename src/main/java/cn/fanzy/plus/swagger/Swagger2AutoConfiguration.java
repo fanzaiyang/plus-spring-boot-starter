@@ -225,14 +225,14 @@ public class Swagger2AutoConfiguration implements WebMvcConfigurer {
                 enableSwaggerBasicAuth = Boolean.parseBoolean(enableAuth);
                 if (enableSwaggerBasicAuth) {
                     //如果开启basic验证,从配置文件中获取用户名和密码
-                    String pUser = environment.getProperty("plus.swagger.knife4j.basic.username");
-                    String pPass = environment.getProperty("plus.swagger.knife4j.basic.password");
-                    if (pUser != null && !"".equals(pUser)) {
-                        dftUserName = pUser;
-                    }
-                    if (pPass != null && !"".equals(pPass)) {
-                        dftPass = pPass;
-                    }
+                    dftUserName = StrUtil.blankToDefault(
+                            environment.getProperty("plus.swagger.knife4j.basic.username"),
+                            dftUserName
+                    );
+                    dftPass = StrUtil.blankToDefault(
+                            environment.getProperty("plus.swagger.knife4j.basic.password"),
+                            dftPass
+                    );
                 }
                 securityBasicAuthFilter = new SecurityBasicAuthFilter(enableSwaggerBasicAuth, dftUserName, dftPass);
             }
