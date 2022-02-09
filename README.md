@@ -9,9 +9,7 @@ springboot增强工具 ———— 旨在减少项目中的反复配置和重�
 #### 安装教程
 
 * SpringBoot版本要求>=2.4.0
-*
-
-最新版本：[![Maven Central](https://img.shields.io/maven-central/v/cn.fanzy.plus/plus-spring-boot-starter.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22cn.fanzy.plus%22%20AND%20a:%22plus-spring-boot-starter%22)
+* 最新版本：[![Maven Central](https://img.shields.io/maven-central/v/cn.fanzy.plus/plus-spring-boot-starter.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22cn.fanzy.plus%22%20AND%20a:%22plus-spring-boot-starter%22)
 
 ```xml
 
